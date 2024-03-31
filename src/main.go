@@ -13,8 +13,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
+	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog"
 )
@@ -24,9 +24,9 @@ var (
 )
 
 type Controller struct {
-	clientset   *kubernetes.Clientset
-	queue       workqueue.RateLimitingInterface
-	informer    cache.SharedIndexInformer
+	clientset *kubernetes.Clientset
+	queue     workqueue.RateLimitingInterface
+	informer  cache.SharedIndexInformer
 }
 
 func NewController(clientset *kubernetes.Clientset, informer cache.SharedIndexInformer) *Controller {
@@ -130,7 +130,9 @@ func main() {
 	stopCh := make(chan struct{})
 	defer close(stopCh)
 
-	cfg, err := rest.InClusterConfig()
+	// Get Minikube config
+	kubeconfig = os.Getenv("KUBECONFIG")
+	cfg, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		klog.Fatalf("Error building kubeconfig: %v", err)
 	}

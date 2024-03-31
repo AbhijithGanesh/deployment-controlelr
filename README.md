@@ -24,3 +24,19 @@ To use this controller, follow these steps:
 ## Contributions
 
 Contributions to this project are welcome. Feel free to submit issues, feature requests, or pull requests on the GitHub repository.
+
+## Note
+
+Set Kubeconfig variable before running
+
+### Windows
+
+```
+set KUBECONFIG="/../../"
+```
+
+### Linux
+
+```sh
+export KUBECONFIG="../../"
+```
